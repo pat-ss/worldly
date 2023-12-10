@@ -11,13 +11,13 @@ def main():
         countries = json.load(file)
 
     country = countries[generate_random(countries)]
-    #country = {}
+    country = {}
     #for c in countries:
-    #    if c['name'] == "England":
-    #        country = c
+        #if c['name'] == "Russia":
+            #country = c
     num_keys = len(country.keys())
-    random_key = random.randrange(4, 14)
-    #random_key = 4
+    random_key = random.randrange(4, 10)
+    #random_key = 9
     if random_key == 4:
         if len(country['tld']) == 1:
             x = input("What is the top level domain (what comes after www.something.) of " + country['name'] + "? ")
@@ -49,22 +49,86 @@ def main():
                 print("You got them all right, who would've thought...")
             main()
     elif random_key == 5:
-        x = input("Is " + country['name'] + " a member of the United Nations? ")
-        main()
+        x_bool = None
+        while True:
+            
+            x = input("Is " + country['name'] + " a member of the United Nations? ")
+            if x.lower() == "y" or x.lower() == "yes" or x.lower() == "s" or x.lower() == "sim":
+                x_bool = True
+            elif x.lower() == "n" or x.lower() == "no" or x.lower() == "nao" or x.lower() == "não":
+                x_bool = False
+            else:
+                print("Input not valid")
+                continue
+            if x_bool == None:
+                break
+            else:
+                if x_bool == country['unMember']:
+                    print("Correct!")
+                    main()
+                else:
+                    print("Oops, that's wrong...")
+                    main()     
     elif random_key == 6:
-        x = input("Is " + country['name'] + " landlocked? ")
-        main()
+        
+        x_bool = None
+        while True:
+            
+            x = input("Is " + country['name'] + " landlocked? ")
+            if x.lower() == "y" or x.lower() == "yes" or x.lower() == "s" or x.lower() == "sim":
+                x_bool = True
+            elif x.lower() == "n" or x.lower() == "no" or x.lower() == "nao" or x.lower() == "não":
+                x_bool = False
+            else:
+                print("Input not valid")
+                continue
+            if x_bool == None:
+                break
+            else:
+                if x_bool == country['landlocked']:
+                    print("Correct!")
+                    main()
+                else:
+                    print("Oops, that's wrong...")
+                    main()
     elif random_key == 7:
         currencies_codes = []
         currencies_names = []
+        counter = 0
         for currency_code, currency_details in country['currencies'].items():
             currencies_codes.append(currency_code.lower())
             currencies_names.append(currency_details['name'].lower())
-            if len(currencies_codes) == 1:
-                x = input(country['name'] + " has one currency. What is it? ")
+        if len(currencies_codes) == 1:
+            x = input(country['name'] + " has one currency. What is it? ")
+            if x.lower() == currencies_codes[0].lower() or x.lower() == currencies_names[0].lower():
+                print("Correct!")
                 main()
             else:
-                x = input(country['name'] + " has " + str(len(currencies_codes)) + " currencies. What are they? ")
+                print("Uuuhhh, that's wrong...")
+                main()
+        else:
+            x = input(country['name'] + " has " + str(len(currencies_codes)) + " currencies. What are they? ")
+            duplicate_codes = currencies_codes
+            currency_counter = len(duplicate_codes)
+            x_arr = x.split(",")
+            for x2 in x_arr:
+                x2 = x2.replace(",", "").lower()
+                if x2[0] == " ":
+                    x2 = x2[1:]
+                if x2 in currencies_codes or x2 in currencies_names:
+                    counter += 1
+                    if x2 in currencies_codes:
+                        currencies_codes.remove(x2)
+                    elif x2 in currencies_names:
+                        currencies_names.remove(x2)
+            if counter == 0:
+                print("Not even one right...")
+                main()
+            elif counter > 0 and counter < currency_counter:
+                print("You got " + str(counter) + " right. Not bad...")
+                main()
+            else:
+                print("Wow, I can't believe you got them all right...")
                 main()
     elif random_key == 8:
         if len(country['capital']) == 1:
@@ -74,8 +138,35 @@ def main():
             x = input(country['name'] + " has " + str(len(country['capital'])) + " capitals. What are they? ")
             main()
     elif random_key == 9:
-        x = input("In which continent is " + country['name'] + " located at? ")
-        main()
+        if len(country['continents']) == 1:
+            x = input("In which continent is " + country['name'] + " located at? ")
+            if x.lower() == country['continents'][0].lower():
+                print("Correct!")
+                main()
+            else:
+                print("Oops, not this time...")
+                main()
+        else:
+            x = input(country['name'] + " is located in " + str(len(country['continents'])) + " continents. What are they? ")
+            x_arr = x.split(",")
+            continents = country['continents']
+            counter = 0
+            for x2 in x_arr:
+                x2 = x2.lower()
+                if x2[0] == " ":
+                    x2 = x2[1:]
+                for continent in continents:
+                    continent = continent.lower()
+                    if x2 == continent:
+                        counter += 1
+                        del(continents[continents.indexOf(continent)])
+            if counter == 0:
+                print("Not even one right...")
+            elif counter > 0 and counter < len(country['continents']):
+                print(str(counter) + " right, not bad...")
+            else:
+                print("All correct? Nice!")
+                           
     elif random_key == 10:
         x = input("In which subregion is " + country['name'] + " located at? ")
         main()

@@ -1026,7 +1026,8 @@
         "side": "right"
       },
       "continents": [
-        "Asia"
+        "Asia",
+        "Europe"
       ],
       "flags": {
         "png": "https://flagcdn.com/w320/tj.png",
